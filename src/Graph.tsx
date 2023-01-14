@@ -5,7 +5,7 @@ import { DataManipulator } from './DataManipulator';
 import './Graph.css';
 
 interface IProps {
-  data: ServerRespond[],
+  data: ServerRespond[],https://github.com/heeehe/jpmc-task-3/edit/main/src/Graph.tsx
 }
 
 interface PerspectiveViewerElement extends HTMLElement {
@@ -23,10 +23,13 @@ class Graph extends Component<IProps, {}> {
     const elem = document.getElementsByTagName('perspective-viewer')[0] as unknown as PerspectiveViewerElement;
 
     const schema = {
-      stock: 'string',
-      top_ask_price: 'float',
-      top_bid_price: 'float',
+      price_abc: 'float',
+      price_def: 'float',
+      ratio: 'float',
+      upper_bound: 'float',
+      lower_bound: 'float',
       timestamp: 'date',
+      trigger_alert: 'float',
     };
 
     if (window.perspective && window.perspective.worker()) {
@@ -40,19 +43,22 @@ class Graph extends Component<IProps, {}> {
       elem.setAttribute('row-pivots', '["timestamp"]');
       elem.setAttribute('columns', '["top_ask_price"]');
       elem.setAttribute('aggregates', JSON.stringify({
-        stock: 'distinctcount',
-        top_ask_price: 'avg',
-        top_bid_price: 'avg',
+        price_abc: 'avg',
+        price_def: 'avg',
+        ratio: 'avg',
         timestamp: 'distinct count',
+        upper_bound: 'avg',
+        lower_bound: 'avg',
+        trigger_alert: 'avg',
       }));
     }
   }
 
   componentDidUpdate() {
     if (this.table) {
-      this.table.update(
+      this.table.update([
         DataManipulator.generateRow(this.props.data),
-      );
+      ] as unknown as TableData);
     }
   }
 }
